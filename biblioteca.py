@@ -2,10 +2,22 @@ def carica_da_file(file_path):
     """Carica i libri dal file"""
     # TODO
 
+    #apro il file con eccezione nome
+    try:
+        infile = input("Inserisci nome file: ")
+        import csv
+        with open(infile) as filecsv:
+            reader = csv.reader(filecsv)
+        return reader
+    except FileNotFoundError:
+        return None
+
 
 def aggiungi_libro(biblioteca, titolo, autore, anno, pagine, sezione, file_path):
     """Aggiunge un libro nella biblioteca"""
     # TODO
+    #faccio una lista di liste per riempire la biblioteca
+    # leggo la prima riga
 
 
 def cerca_libro(biblioteca, titolo):
