@@ -1,33 +1,76 @@
 def carica_da_file(file_path):
     """Carica i libri dal file"""
     # TODO
-
-    #apro il file con eccezione nome
     try:
-        infile = input("Inserisci nome file: ")
-        import csv
-        with open(infile) as filecsv:
-            reader = csv.reader(filecsv)
-        return reader
+        with open(file_path,'r', encoding='utf-8') as file:
+            righe = file.readlines()
+
+            num_sezioni = int(righe[0].strip())
+            biblioteca = [[] for i in range(num_sezioni)]
+
+            for riga in righe[1:]:
+                parti = riga.strip().split(',')
+                titolo = parti[0].strip()
+                autore = parti[1].strip()
+                anno = int(parti[2].strip())
+                pagine = int(parti[3].strip())
+                sezione = int(parti[4].strip())
+
+                libro = [titolo, autore, anno, pagine, sezione]
+                biblioteca[sezione - 1].append(libro)
+
+            return biblioteca
     except FileNotFoundError:
         return None
+
 
 
 def aggiungi_libro(biblioteca, titolo, autore, anno, pagine, sezione, file_path):
     """Aggiunge un libro nella biblioteca"""
     # TODO
-    #faccio una lista di liste per riempire la biblioteca
-    # leggo la prima riga
+    if sezione < 1 or sezione > len(biblioteca):
+        return None
+
+    for sezione_libri in biblioteca:
+        for libro in sezione_libri:
+            if libro[0].lower() == titolo.lower():
+                return None
+
+    nuovo_libro = [titolo, autore, anno, pagine, sezione]
+    biblioteca[sezione - 1].append(nuovo_libro)
+
+    try:
+        with open(file_path, 'a', encoding='utf-8') as file:
+            riga = f"{titolo},{autore},{anno},{pagine},{sezione}\n"
+            file.write(riga)
+        return nuovo_libro
+
+    except FileNotFoundError:
+        return None
+
 
 
 def cerca_libro(biblioteca, titolo):
     """Cerca un libro nella biblioteca dato il titolo"""
     # TODO
+    for sezione_libri in biblioteca:
+        for libro in sezione_libri:
+            if libro[0].lower() == titolo.lower():
+                return f"{libro[0]}, {libro[1]}, {libro[2]}, {libro[3]}, {libro[4]}"
+    return None
+
 
 
 def elenco_libri_sezione_per_titolo(biblioteca, sezione):
     """Ordina i titoli di una data sezione della biblioteca in ordine alfabetico"""
     # TODO
+    if sezione < 1 or sezione > len(biblioteca):
+        return None
+
+    sezione_libri = biblioteca[sezione - 1]
+    titoli = [libro[0] for libro in sezione_libri]
+    return sorted(titoli)
+
 
 
 def main():
